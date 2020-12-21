@@ -1,5 +1,6 @@
 {
     "sqlhost" : "",
+    "sqlport" : "",
     "sqluser" : "",
     "sqlpass" : "",
     "sqldb" : "",
