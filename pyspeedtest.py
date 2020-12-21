@@ -13,7 +13,7 @@ except Exception as e:
     sys.exit(1)
 
 nowdt = datetime.now()
-job = Popen(['speedtest', '-fjson'], shell=True, stdout=PIPE, stderr=PIPE)
+job = Popen(['speedtest -fjson'], shell=True, stdout=PIPE, stderr=PIPE)
 stdout,stderr = job.communicate()
 try:
     output = json.loads(stdout.decode('utf-8'))
@@ -28,7 +28,7 @@ conn = pymysql.connect(
 )
 try:
     cursor = conn.cursor()
-    sql = "INSERT INTO %s VALUES ('', %s, %s, %s, %s)"
+    sql = "INSERT INTO %s VALUES (%s, %s, %s, %s)"
     cursor.execute(sql, (config['sqltable'], output['timestamp'], output['ping']['latency'], output['upload']['bytes'], output['download']['bytes']))
     conn.commit()
     conn.close()
