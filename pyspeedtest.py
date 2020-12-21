@@ -7,7 +7,7 @@ from datetime import datetime
 from subprocess import Popen, PIPE
 
 try:
-    config = josn.loads(open('config.json').read())
+    config = json.loads(open('config.json').read())
 except Exception as e:
     print("Unable to open config file: %s" % ( e))
     sys.exit(1)
