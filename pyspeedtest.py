@@ -17,6 +17,7 @@ job = Popen(['speedtest -fjson'], shell=True, stdout=PIPE, stderr=PIPE)
 stdout,stderr = job.communicate()
 try:
     output = json.loads(stdout.decode('utf-8'))
+    output['ping']['latency'] = int(round(output['ping']['latency'], 2))
 except:
     output = {'timestamp' : nowdt.strftime("%Y-%m-%dT%I:%M:%SZ"), 'ping' : { 'latency' : 0 }, 'download' : { 'bytes' :0 }, 'upload' : { 'bytes' : 0}}
 
@@ -26,10 +27,11 @@ conn = pymysql.connect(
     password=config['sqlpass'],
     db=config['sqldb']
 )
+
 try:
     cursor = conn.cursor()
-    sql = "INSERT INTO %s VALUES (%s, %s, %s, %s)"
-    cursor.execute(sql, (config['sqltable'], output['timestamp'], output['ping']['latency'], output['upload']['bytes'], output['download']['bytes']))
+    sql = "INSERT INTO %s VALUES (NULL, '%s', %f, %i, %i)" % (config['sqltable'], output['timestamp'], output['ping']['latency'], output['upload']['bytes'], output['download']['bytes'])
+    cursor.execute(sql)
     conn.commit()
     conn.close()
 except Exception as e:
