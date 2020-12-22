@@ -6,8 +6,10 @@ import pymysql
 from datetime import datetime
 from subprocess import Popen, PIPE
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
 try:
-    config = json.loads(open('config.json').read())
+    config = json.loads(open("%s/config.json" % (dir_path)).read())
 except Exception as e:
     print("Unable to open config file: %s" % ( e))
     sys.exit(1)
